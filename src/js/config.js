@@ -8,7 +8,9 @@ window.CAREER_COPILOT_CONFIG = {
     title: "Copilot Studio Web Channel"
   },
   bot2: {
-    tokenApiPath: "/api/bot2/token",
+    sessionApiPath: "/api/bot2/session", // bevorzugter Bootstrap-Endpoint (liefert token + domain)
+    tokenApiPath: "/api/bot2/token", // optionaler Fallback für ältere Backends
+    // directLineDomain: "https://directline.botframework.com/v3/directline", // optional fallback when token response has no domain
     styleOptions: {
       accent: "#0f172a",
       botAvatarInitials: "CC",

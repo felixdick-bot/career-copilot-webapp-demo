@@ -8,7 +8,9 @@ window.CAREER_COPILOT_CONFIG_LOCAL = {
     // title: "Mein lokaler Copilot"
   },
   bot2: {
-    // tokenApiPath: "http://localhost:8787/api/bot2/token",
+    // sessionApiPath: "http://localhost:8787/api/bot2/session",
+    // tokenApiPath: "http://localhost:8787/api/bot2/token", // optional fallback
+    // directLineDomain: "https://directline.botframework.com/v3/directline", // optional fallback if token endpoint returns no domain
     // styleOptions: {
     //   accent: "#0f172a"
     // }

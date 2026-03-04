@@ -39,18 +39,22 @@ career-copilot-webapp/
 - Seite: `career-bot2.html`
 - Behält das bestehende FAB-/Panel-Pattern bei.
 - Die Nachrichten-Engine läuft über Bot Framework Web Chat (CDN nur auf dieser Seite).
-- Beim Öffnen des Panels holt das Frontend ein Token **nur vom eigenen Backend** (`/api/bot2/token`) und rendert dann Web Chat im Panel.
+- Beim Öffnen des Panels nutzt das Frontend bevorzugt den Session-Bootstrap vom eigenen Backend (`/api/bot2/session`) und rendert danach Web Chat im Panel.
+- Fallback für ältere Backends: `/api/bot2/token`.
 - Kein Upstream-Token-Endpoint und keine Secrets im Frontend.
 
 ## Architektur (Bot2)
 
 ```text
 Browser (career-bot2.html)
-  -> POST /api/bot2/token (same-origin)
-FastAPI backend (Token-Proxy)
+  -> POST /api/bot2/session (same-origin, bevorzugt)
+  -> fallback: POST /api/bot2/token
+FastAPI backend (Session/Token-Proxy)
+  -> GET .../powervirtualagents/regionalchannelsettings?api-version=...
   -> POST BOT2_TOKEN_ENDPOINT (serverseitig)
-Token-Response (sanitized)
-  -> WebChat.createDirectLine({ token, domain? })
+Session-Response (sanitized)
+  -> { token, domain, conversationId?, expires_in? }
+  -> WebChat.createDirectLine({ token, domain })
   -> renderWebChat(...) im Bot2-Panel
 ```
 
@@ -104,10 +108,37 @@ Healthcheck:
 
 In `src/js/config.js`:
 
-- `bot2.tokenApiPath` (Default: `/api/bot2/token`)
+- `bot2.sessionApiPath` (Default: `/api/bot2/session`, bevorzugt)
+- `bot2.tokenApiPath` (Default: `/api/bot2/token`, optionaler Fallback)
 - `bot2.styleOptions` (Avatar-Initialen, Farben, etc.)
 
-Das Frontend spricht nur den lokalen/same-origin Proxy-Pfad an.
+Das Frontend spricht nur lokale/same-origin Proxy-Pfade an.
+
+## Troubleshooting Bot2 502 (Quick Checks)
+
+Wenn Bot2 im Frontend mit 502 fehlschlägt, zuerst Backend-Endpunkte direkt testen:
+
+```bash
+# 1) Health
+curl -i http://localhost:8787/api/health
+
+# 2) Neuer Session-Bootstrap (liefert token + domain)
+curl -i -X POST http://localhost:8787/api/bot2/session \
+  -H 'Content-Type: application/json' \
+  -d '{}'
+
+# 3) Legacy Token-Proxy ohne userId (muss Upstream ohne JSON-Body aufrufen)
+curl -i -X POST http://localhost:8787/api/bot2/token \
+  -H 'Content-Type: application/json' \
+  -d '{}'
+
+# 4) Legacy Token-Proxy mit userId (sendet {"userId":"..."} an Upstream)
+curl -i -X POST http://localhost:8787/api/bot2/token \
+  -H 'Content-Type: application/json' \
+  -d '{"user_id":"felix"}'
+```
+
+Bei Upstream-Fehlern enthält die Backend-Response jetzt einen sicheren Hinweis mit Upstream-Status und Kurzgrund (ohne Secret-Leaks).
 
 ### Lokale Overrides ohne Git-Konflikte
 
@@ -116,3 +147,15 @@ Das Frontend spricht nur den lokalen/same-origin Proxy-Pfad an.
 3. `src/js/config.local.js` ist gitignored und wird nicht committed
 
 So bleiben persönliche URLs/Secrets lokal, während `src/js/config.js` saubere Team-Defaults enthält.
+
+## Bot2 Troubleshooting (502 / Bootstrap)
+
+- Ein `502` auf `/api/bot2/token` bedeutet häufig: `BOT2_TOKEN_ENDPOINT` ist falsch oder das Upstream-Format passt nicht.
+- Für die Validierung bevorzugt `/api/bot2/session` nutzen (liefert `token` + regionale `domain`).
+
+Beispielchecks:
+
+```bash
+curl -i -X POST http://localhost:8787/api/bot2/session
+curl -i -X POST http://localhost:8787/api/bot2/token
+```

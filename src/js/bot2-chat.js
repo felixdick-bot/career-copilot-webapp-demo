@@ -36,7 +36,9 @@
   const localConfig = window.CAREER_COPILOT_CONFIG_LOCAL || {};
   const config = deepMerge(baseConfig, localConfig);
   const bot2Config = {
+    sessionApiPath: "/api/bot2/session",
     tokenApiPath: "/api/bot2/token",
+    directLineDomain: "",
     styleOptions: {
       accent: "#0f172a",
       botAvatarInitials: "CC",
@@ -65,20 +67,68 @@
     showTextMessage(text, "bot");
   };
 
-  const fetchToken = async () => {
-    const response = await fetch(bot2Config.tokenApiPath, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({}),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Token request failed (${response.status})`);
+  const formatBackendError = async (response) => {
+    let detail = "";
+    try {
+      const body = await response.clone().json();
+      if (body && typeof body.detail === "string") {
+        detail = body.detail;
+      }
+    } catch (_error) {
+      // ignore parse errors
     }
 
-    return response.json();
+    const statusPart = `HTTP ${response.status}`;
+    return detail ? `${statusPart} - ${detail}` : statusPart;
+  };
+
+  const fetchSessionOrToken = async () => {
+    let sessionError = null;
+
+    try {
+      const sessionResponse = await fetch(bot2Config.sessionApiPath, {
+        method: "POST",
+      });
+
+      if (!sessionResponse.ok) {
+        throw new Error(await formatBackendError(sessionResponse));
+      }
+
+      const sessionPayload = await sessionResponse.json();
+      if (!sessionPayload?.token) {
+        throw new Error("Session response missing token");
+      }
+
+      if (!sessionPayload?.domain) {
+        throw new Error("Session response missing domain");
+      }
+
+      return sessionPayload;
+    } catch (error) {
+      sessionError = error;
+      console.warn("[bot2-chat] Session bootstrap failed, trying token fallback:", error);
+    }
+
+    const tokenResponse = await fetch(bot2Config.tokenApiPath, {
+      method: "POST",
+    });
+
+    if (!tokenResponse.ok) {
+      const tokenErrorText = await formatBackendError(tokenResponse);
+      const sessionErrorText = sessionError ? `; session: ${sessionError.message}` : "";
+      throw new Error(`Token fallback failed (${tokenErrorText}${sessionErrorText})`);
+    }
+
+    const tokenPayload = await tokenResponse.json();
+    if (!tokenPayload?.token) {
+      throw new Error("Token fallback response missing token");
+    }
+
+    if (!tokenPayload.domain && bot2Config.directLineDomain) {
+      tokenPayload.domain = bot2Config.directLineDomain;
+    }
+
+    return tokenPayload;
   };
 
   const initWebChat = async () => {
@@ -91,10 +141,7 @@
     }
 
     try {
-      const tokenPayload = await fetchToken();
-      if (!tokenPayload?.token) {
-        throw new Error("Missing token field in response");
-      }
+      const tokenPayload = await fetchSessionOrToken();
 
       const directLineOptions = {
         token: tokenPayload.token,
