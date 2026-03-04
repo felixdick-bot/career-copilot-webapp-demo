@@ -3,118 +3,126 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CareerPath – Karriere & Entwicklung</title>
-    <meta name="description" content="Beispielhafte Karriere-Webseite mit integriertem Copilot-Chat-Widget." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
+    <title>Career Copilot – Karriere mit KI-Unterstützung</title>
+    <meta
+      name="description"
+      content="Career Copilot hilft bei Karriereplanung, Bewerbungsstrategie und Interviewvorbereitung – modern, responsiv und integrationsbereit."
+    />
+    <link rel="stylesheet" href="src/styles/main.css" />
   </head>
   <body>
     <header class="site-header">
-      <div class="container nav-wrap">
-        <div class="brand">CareerPath</div>
-        <nav>
-          <a href="#roles">Rollen</a>
-          <a href="#roadmap">Roadmap</a>
-          <a href="#resources">Ressourcen</a>
-        </nav>
+      <div class="container">
+        <a href="#" class="brand" aria-label="Career Copilot Startseite">Career Copilot</a>
+        <a class="btn btn-ghost" href="#chat-assistant">KI-Assistent öffnen</a>
       </div>
     </header>
 
     <main>
-      <section class="hero container">
-        <div class="hero-text">
-          <p class="eyebrow">Dein Karriere-Kompass</p>
-          <h1>Finde den nächsten Schritt für deine berufliche Entwicklung</h1>
-          <p>
-            Entdecke Rollenprofile, Lernpfade und konkrete Skill-Empfehlungen. Diese Demo zeigt eine moderne,
-            mobile-responsive Karriere-Seite mit integriertem Copilot-Chat.
-          </p>
-          <div class="hero-cta">
-            <a href="#roadmap" class="btn btn-primary">Roadmap ansehen</a>
-            <a href="#resources" class="btn btn-ghost">Ressourcen</a>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <p class="eyebrow">Karriereplattform mit KI-Begleitung</p>
+            <h1>Dein nächster Karriereschritt, klar geplant.</h1>
+            <p class="lead">
+              Von der Standortbestimmung bis zum Interview: Career Copilot liefert dir personalisierte
+              Guidance und bereitet die Integration echter Copilot-Backends vor.
+            </p>
+            <div class="hero-actions">
+              <a class="btn" href="#chat-assistant">Mit Copilot starten</a>
+              <a class="btn btn-ghost" href="#steps">So funktioniert’s</a>
+            </div>
           </div>
-        </div>
-        <div class="hero-card">
-          <h3>Beliebte Karrierepfade</h3>
-          <ul>
-            <li><strong>Data Analyst</strong><span>6–12 Monate</span></li>
-            <li><strong>Cloud Engineer</strong><span>9–18 Monate</span></li>
-            <li><strong>Product Manager</strong><span>8–14 Monate</span></li>
-            <li><strong>AI Consultant</strong><span>10–20 Monate</span></li>
-          </ul>
-        </div>
-      </section>
-
-      <section id="roles" class="container section">
-        <h2>Rollen im Überblick</h2>
-        <div class="grid cards">
-          <article class="card">
-            <h3>Data Analyst</h3>
-            <p>Analysiert Daten, baut Dashboards und liefert Entscheidungsgrundlagen fürs Business.</p>
-            <p class="meta">Core Skills: SQL, Power BI, Storytelling</p>
-          </article>
-          <article class="card">
-            <h3>Cloud Engineer</h3>
-            <p>Automatisiert Infrastruktur, entwickelt skalierbare Cloud-Architekturen und betreibt Plattformen.</p>
-            <p class="meta">Core Skills: Azure, IaC, Monitoring</p>
-          </article>
-          <article class="card">
-            <h3>AI Consultant</h3>
-            <p>Verbindet KI-Use-Cases mit Business-Prozessen und übersetzt Anforderungen in Lösungen.</p>
-            <p class="meta">Core Skills: Copilot, GenAI, Governance</p>
-          </article>
+          <aside class="hero-card" aria-label="Vorteile auf einen Blick">
+            <h2>Was du bekommst</h2>
+            <ul>
+              <li>Klare Karriere-Roadmap</li>
+              <li>Rollen- und Skill-Matching</li>
+              <li>Bewerbungs- & Interview-Coaching</li>
+              <li>Nahtlose Copilot-Integration</li>
+            </ul>
+          </aside>
         </div>
       </section>
 
-      <section id="roadmap" class="container section">
-        <h2>90-Tage Lern-Roadmap (Beispiel)</h2>
-        <div class="timeline">
-          <div class="step"><span>Woche 1–4</span><p>Grundlagen lernen, Tooling aufsetzen, erste Mini-Projekte umsetzen.</p></div>
-          <div class="step"><span>Woche 5–8</span><p>Portfolio-Projekt bauen, Peer-Feedback einholen, Skills vertiefen.</p></div>
-          <div class="step"><span>Woche 9–12</span><p>Case Study dokumentieren, Bewerbungsprofil schärfen, Interview-Training.</p></div>
-        </div>
-      </section>
-
-      <section id="resources" class="container section">
-        <h2>Empfohlene Ressourcen</h2>
-        <div class="grid resources">
-          <a class="resource" href="#">Skill-Matrix Template</a>
-          <a class="resource" href="#">Interview-Fragenkatalog</a>
-          <a class="resource" href="#">Portfolio-Checkliste</a>
-          <a class="resource" href="#">Lernplan Download</a>
+      <section class="section" id="steps">
+        <div class="container">
+          <h2>In 3 Schritten zu mehr Karriereklarheit</h2>
+          <div class="card-grid">
+            <article class="card">
+              <h3>1. Standort erfassen</h3>
+              <p>Fähigkeiten, Erfahrung und Ziele strukturiert aufnehmen.</p>
+            </article>
+            <article class="card">
+              <h3>2. Zielbild schärfen</h3>
+              <p>Passende Rollen, Lernpfade und Prioritäten ableiten.</p>
+            </article>
+            <article class="card">
+              <h3>3. Umsetzen</h3>
+              <p>CV, Anschreiben, Interviewfragen und nächste Schritte planen.</p>
+            </article>
+          </div>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer">
-      <div class="container">© 2026 CareerPath Demo • Built for Copilot Chat Integration</div>
-    </footer>
-
-    <button id="copilotToggle" class="copilot-fab" aria-label="Copilot öffnen" aria-expanded="false">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 3a9 9 0 0 0-9 9v4a2 2 0 0 0 2 2h3v-6H5a7 7 0 1 1 14 0h-3v6h3a2 2 0 0 0 2-2v-4a9 9 0 0 0-9-9Zm-2 15h4v2h-4v-2Z"/>
-      </svg>
+    <button
+      id="chat-fab"
+      class="chat-fab"
+      type="button"
+      aria-label="Career Copilot Chat öffnen"
+      aria-expanded="false"
+      aria-controls="chat-panel"
+    >
+      <span aria-hidden="true">🤖</span>
+      <span class="chat-fab__text">Copilot</span>
     </button>
 
-    <section id="copilotPanel" class="copilot-panel" aria-hidden="true">
-      <header>
-        <div>
-          <strong>Career Copilot</strong>
-          <p>Frag mich zu Rollen, Skills und Karrierewegen.</p>
+    <section
+      id="chat-panel"
+      class="chat-panel"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="chat-title"
+      hidden
+    >
+      <header class="chat-panel__header" id="chat-assistant">
+        <h2 id="chat-title">Career Copilot</h2>
+        <div class="chat-panel__controls">
+          <label for="integration-mode" class="sr-only">Integrationsmodus auswählen</label>
+          <select id="integration-mode" aria-label="Integrationsmodus">
+            <option value="mock">Mock / Local</option>
+            <option value="iframe">Copilot Embed (iFrame)</option>
+            <option value="agents">Agents SDK (Placeholder)</option>
+          </select>
+          <button id="chat-close" class="icon-btn" aria-label="Chat schließen" type="button">✕</button>
         </div>
-        <button id="copilotClose" aria-label="Chat schließen">✕</button>
       </header>
-      <div class="copilot-messages" id="copilotMessages">
-        <div class="msg bot">Hi 👋 Ich bin dein Copilot. Wie kann ich dir bei deiner Karriereplanung helfen?</div>
+
+      <p id="chat-status" class="chat-status" aria-live="polite"></p>
+
+      <div id="chat-messages" class="chat-messages" aria-label="Chatverlauf"></div>
+
+      <div id="embed-container" class="embed-container" hidden>
+        <p>Kein Embed konfiguriert. Hinterlege eine iFrame-URL in der Konfiguration.</p>
       </div>
-      <form id="copilotForm" class="copilot-input" autocomplete="off">
-        <input id="copilotText" type="text" placeholder="Frage eingeben…" />
-        <button type="submit">Senden</button>
+
+      <form id="chat-form" class="chat-form" aria-label="Nachricht senden">
+        <label for="chat-input" class="sr-only">Nachricht eingeben</label>
+        <input
+          id="chat-input"
+          name="message"
+          type="text"
+          placeholder="Frag mich zu Karriere, CV oder Interview …"
+          autocomplete="off"
+          required
+        />
+        <button class="btn" type="submit">Senden</button>
       </form>
     </section>
 
-    <script src="script.js"></script>
+    <script src="src/js/config.js"></script>
+    <script src="src/js/chat-service.js"></script>
+    <script src="src/js/app.js"></script>
   </body>
 </html>
