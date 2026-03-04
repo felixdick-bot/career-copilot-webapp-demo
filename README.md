@@ -59,14 +59,14 @@ Token-Response (sanitized)
 
 ```bash
 cd career-copilot-webapp
-python -m http.server 8080
+python -m http.server 4173
 ```
 
 Öffnen:
 
-- <http://localhost:8080/index.html>
-- <http://localhost:8080/career-bot1.html>
-- <http://localhost:8080/career-bot2.html>
+- <http://localhost:4173/index.html>
+- <http://localhost:4173/career-bot1.html>
+- <http://localhost:4173/career-bot2.html>
 
 ### 2) Backend (FastAPI)
 
@@ -86,12 +86,12 @@ Danach `.env` anpassen (mindestens `BOT2_TOKEN_ENDPOINT`).
 Start:
 
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn main:app --reload --host 0.0.0.0 --port 8787
 ```
 
 Healthcheck:
 
-- `GET http://localhost:8000/api/health`
+- `GET http://localhost:8787/api/health`
 
 ## ENV-Konfiguration (Backend)
 

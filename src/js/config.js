@@ -24,7 +24,7 @@ window.CAREER_COPILOT_CONFIG = {
     useAuthenticatedFlow: true
   },
   api: {
-    baseUrl: "", // e.g. http://localhost:8000/api (future Python backend)
+    baseUrl: "", // e.g. http://localhost:8787/api (future Python backend)
     timeoutMs: 12000
   }
 };
