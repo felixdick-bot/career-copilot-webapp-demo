@@ -32,6 +32,8 @@ career-copilot-webapp/
 - Seite: `career-bot1.html`
 - Verwendet ein rundes FAB unten rechts mit gemeinsamem Toggle-Verhalten.
 - Beim Öffnen zeigt das Panel nur den iFrame (ohne zusätzliche sichtbare Wrapper-Header/UI).
+- Der iFrame wird nach dem Seitenaufbau im Hintergrund vorgewärmt (idle warmup), beim Schließen nicht zerstört und beim erneuten Öffnen direkt weiterverwendet.
+- Die Bot1-Seite setzt zusätzlich `preconnect`/`dns-prefetch` auf die Copilot-Domain für schnelleren Verbindungsaufbau.
 - Konfiguration über `src/js/config.js > copilotEmbed.iframeUrl`.
 
 ### Bot 2 (Custom Chat-UI, SDK/API-ready)
