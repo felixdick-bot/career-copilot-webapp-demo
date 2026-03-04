@@ -22,8 +22,8 @@
   const closeBtn = document.getElementById("chat-close");
   const embedContainer = document.getElementById("embed-container");
 
-  if (!fab || !panel || !closeBtn || !embedContainer) {
-    console.error("[career-copilot] Chat UI elements not found.");
+  if (!fab || !panel || !embedContainer) {
+    console.error("[career-copilot] Required chat UI elements not found.");
     return;
   }
 
@@ -84,15 +84,39 @@
     }
   }
 
-  fab.addEventListener("click", () => {
+  function togglePanel() {
     if (panel.hidden) {
       openPanel();
     } else {
       closePanel();
     }
+  }
+
+  fab.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    togglePanel();
   });
 
-  closeBtn.addEventListener("click", closePanel);
+  if (closeBtn) {
+    closeBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      closePanel();
+    });
+  }
+
+  document.addEventListener("click", (event) => {
+    if (panel.hidden) return;
+
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+
+    if (panel.contains(target) || fab.contains(target)) {
+      return;
+    }
+
+    closePanel();
+  });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && !panel.hidden) {

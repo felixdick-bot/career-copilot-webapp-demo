@@ -14,7 +14,7 @@
     <header class="site-header">
       <div class="container">
         <a href="#" class="brand" aria-label="Career Copilot Startseite">Career Copilot</a>
-        <a class="btn btn-ghost" href="#chat-assistant">KI-Assistent öffnen</a>
+        <a class="btn btn-ghost" href="#chat-panel">KI-Assistent öffnen</a>
       </div>
     </header>
 
@@ -29,7 +29,7 @@
               Guidance und bereitet die Integration echter Copilot-Backends vor.
             </p>
             <div class="hero-actions">
-              <a class="btn" href="#chat-assistant">Mit Copilot starten</a>
+              <a class="btn" href="#chat-panel">Mit Copilot starten</a>
               <a class="btn btn-ghost" href="#steps">So funktioniert’s</a>
             </div>
           </div>
@@ -84,14 +84,9 @@
       class="chat-panel"
       role="dialog"
       aria-modal="false"
-      aria-labelledby="chat-title"
+      aria-label="Career Copilot Chat"
       hidden
     >
-      <header class="chat-panel__header" id="chat-assistant">
-        <h2 id="chat-title">Career Copilot</h2>
-        <button id="chat-close" class="icon-btn" aria-label="Chat schließen" type="button">✕</button>
-      </header>
-
       <div id="embed-container" class="embed-container">
         <p>Kein Embed konfiguriert. Hinterlege eine iFrame-URL in <code>src/js/config.js</code>.</p>
       </div>
