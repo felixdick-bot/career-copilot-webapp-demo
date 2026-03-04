@@ -1,7 +1,10 @@
 window.CAREER_COPILOT_CONFIG = {
-  integrationMode: "mock", // mock | iframe | agents
+  integrationMode: "iframe", // mock | iframe | agents
   copilotEmbed: {
-    iframeUrl: "", // e.g. https://webchat.botframework.com/embed/<your-bot-id>?s=<token>
+    // Du kannst ENTWEDER die reine URL eintragen...
+    // iframeUrl: "https://copilotstudio.microsoft.com/environments/.../webchat?__version__=2",
+    // ...ODER das komplette iframe-Snippet. app.js extrahiert automatisch src="...".
+    iframeUrl: "",
     title: "Copilot Studio Web Channel"
   },
   agentsSdk: {
