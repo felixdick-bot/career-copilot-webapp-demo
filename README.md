@@ -139,6 +139,7 @@ curl -i -X POST http://localhost:8787/api/bot2/token \
 ```
 
 Bei Upstream-Fehlern enthält die Backend-Response jetzt einen sicheren Hinweis mit Upstream-Status und Kurzgrund (ohne Secret-Leaks).
+Hinweis: Einige Copilot-Token-Endpunkte erwarten `GET` statt `POST`. Das Backend nutzt bei `user_id` zuerst `POST` und fällt bei `404 RouteNotFound` automatisch auf `GET` zurück (ohne `user_id` direkt `GET`).
 
 ### Lokale Overrides ohne Git-Konflikte
 

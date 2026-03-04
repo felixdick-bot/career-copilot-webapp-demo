@@ -27,10 +27,11 @@ def _parse_cors_origins() -> list[str]:
     return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
 
-def _safe_upstream_error(phase: str, status_code: int) -> HTTPException:
+def _safe_upstream_error(phase: str, status_code: int, method: str | None = None) -> HTTPException:
+    method_suffix = f", method {method}" if method else ""
     return HTTPException(
         status_code=502,
-        detail=f"Bot2 upstream error during {phase} phase (status {status_code})",
+        detail=f"Bot2 upstream error during {phase} phase (status {status_code}{method_suffix})",
     )
 
 
@@ -54,6 +55,41 @@ def _build_regional_settings_url(token_endpoint: str) -> str:
 
 def _normalize_directline_domain(base_url: str) -> str:
     return f"{base_url.rstrip('/')}/v3/directline"
+
+
+def _is_route_not_found_404(response: httpx.Response) -> bool:
+    if response.status_code != 404:
+        return False
+
+    try:
+        data = response.json()
+    except ValueError:
+        return False
+
+    if not isinstance(data, dict):
+        return False
+
+    error_obj = data.get("error") if isinstance(data.get("error"), dict) else {}
+    code = str(error_obj.get("code") or data.get("code") or "")
+    message = str(error_obj.get("message") or data.get("message") or "")
+    combined = f"{code} {message}".lower()
+    return "routenotfound" in combined
+
+
+async def _request_upstream_token(
+    client: httpx.AsyncClient,
+    upstream_endpoint: str,
+    payload: TokenRequest | None,
+) -> tuple[httpx.Response, str]:
+    if payload and payload.user_id:
+        post_response = await client.post(upstream_endpoint, json={"userId": payload.user_id})
+        if _is_route_not_found_404(post_response):
+            get_response = await client.get(upstream_endpoint)
+            return get_response, "GET"
+        return post_response, "POST"
+
+    get_response = await client.get(upstream_endpoint)
+    return get_response, "GET"
 
 
 cors_origins = _parse_cors_origins()
@@ -103,16 +139,14 @@ async def bot2_session(payload: TokenRequest | None = None) -> Dict[str, Any]:
                     detail="Bot2 upstream error during regional phase (missing directline URL)",
                 )
 
-            if payload and payload.user_id:
-                token_response = await client.post(
-                    upstream_endpoint,
-                    json={"userId": payload.user_id},
-                )
-            else:
-                token_response = await client.post(upstream_endpoint)
+            token_response, method_used = await _request_upstream_token(
+                client,
+                upstream_endpoint,
+                payload,
+            )
 
             if token_response.status_code >= 400:
-                raise _safe_upstream_error("token", token_response.status_code)
+                raise _safe_upstream_error("token", token_response.status_code, method_used)
 
         token_data = token_response.json()
         sanitized = TokenResponse(
@@ -141,13 +175,14 @@ async def bot2_token(payload: TokenRequest | None = None) -> Dict[str, Any]:
 
     try:
         async with httpx.AsyncClient(timeout=timeout_seconds) as client:
-            if payload and payload.user_id:
-                response = await client.post(upstream_endpoint, json={"userId": payload.user_id})
-            else:
-                response = await client.post(upstream_endpoint)
+            response, method_used = await _request_upstream_token(
+                client,
+                upstream_endpoint,
+                payload,
+            )
 
         if response.status_code >= 400:
-            raise _safe_upstream_error("token", response.status_code)
+            raise _safe_upstream_error("token", response.status_code, method_used)
 
         data = response.json()
         sanitized = TokenResponse(
