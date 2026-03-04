@@ -6,7 +6,35 @@
 
   if (!panel || !fab || !messages || !webchatRoot) return;
 
-  const config = window.CAREER_COPILOT_CONFIG || {};
+  const deepMerge = (target, source) => {
+    if (!source || typeof source !== "object") return { ...target };
+
+    const output = { ...target };
+
+    Object.keys(source).forEach((key) => {
+      const sourceValue = source[key];
+      const targetValue = output[key];
+
+      if (
+        sourceValue &&
+        typeof sourceValue === "object" &&
+        !Array.isArray(sourceValue) &&
+        targetValue &&
+        typeof targetValue === "object" &&
+        !Array.isArray(targetValue)
+      ) {
+        output[key] = deepMerge(targetValue, sourceValue);
+      } else {
+        output[key] = sourceValue;
+      }
+    });
+
+    return output;
+  };
+
+  const baseConfig = window.CAREER_COPILOT_CONFIG || {};
+  const localConfig = window.CAREER_COPILOT_CONFIG_LOCAL || {};
+  const config = deepMerge(baseConfig, localConfig);
   const bot2Config = {
     tokenApiPath: "/api/bot2/token",
     styleOptions: {

@@ -7,13 +7,42 @@
     },
   };
 
+  const deepMerge = (target, source) => {
+    if (!source || typeof source !== "object") return { ...target };
+
+    const output = { ...target };
+
+    Object.keys(source).forEach((key) => {
+      const sourceValue = source[key];
+      const targetValue = output[key];
+
+      if (
+        sourceValue &&
+        typeof sourceValue === "object" &&
+        !Array.isArray(sourceValue) &&
+        targetValue &&
+        typeof targetValue === "object" &&
+        !Array.isArray(targetValue)
+      ) {
+        output[key] = deepMerge(targetValue, sourceValue);
+      } else {
+        output[key] = sourceValue;
+      }
+    });
+
+    return output;
+  };
+
   const rawConfig = window.CAREER_COPILOT_CONFIG || {};
+  const localConfig = window.CAREER_COPILOT_CONFIG_LOCAL || {};
+  const mergedConfig = deepMerge(rawConfig, localConfig);
+
   const config = {
     ...defaultConfig,
-    ...rawConfig,
+    ...mergedConfig,
     copilotEmbed: {
       ...defaultConfig.copilotEmbed,
-      ...(rawConfig.copilotEmbed || {}),
+      ...(mergedConfig.copilotEmbed || {}),
     },
   };
 
@@ -53,7 +82,7 @@
 
     if (!iframeUrl) {
       embedContainer.innerHTML =
-        "<p>Kein gültiger Embed-Link gefunden. Trage in <code>src/js/config.js</code> entweder die reine URL oder ein komplettes <code>&lt;iframe ...&gt;</code>-Snippet ein.</p>";
+        "<p>Kein gültiger Embed-Link gefunden. Trage die URL in <code>src/js/config.local.js</code> (oder Team-Defaults in <code>src/js/config.js</code>) ein.</p>";
       return;
     }
 

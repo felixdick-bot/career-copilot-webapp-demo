@@ -19,7 +19,8 @@ career-copilot-webapp/
 │   │   ├── bot2-chat.js
 │   │   ├── chat-service.js
 │   │   ├── common.js
-│   │   └── config.js
+│   │   ├── config.js
+│   │   └── config.local.example.js
 │   └── styles/
 │       └── main.css
 └── README.md
@@ -107,3 +108,11 @@ In `src/js/config.js`:
 - `bot2.styleOptions` (Avatar-Initialen, Farben, etc.)
 
 Das Frontend spricht nur den lokalen/same-origin Proxy-Pfad an.
+
+### Lokale Overrides ohne Git-Konflikte
+
+1. Kopiere `src/js/config.local.example.js` nach `src/js/config.local.js`
+2. Trage deine persönliche Werte dort ein (z. B. `copilotEmbed.iframeUrl`)
+3. `src/js/config.local.js` ist gitignored und wird nicht committed
+
+So bleiben persönliche URLs/Secrets lokal, während `src/js/config.js` saubere Team-Defaults enthält.
