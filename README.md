@@ -148,14 +148,3 @@ Bei Upstream-Fehlern enthält die Backend-Response jetzt einen sicheren Hinweis 
 
 So bleiben persönliche URLs/Secrets lokal, während `src/js/config.js` saubere Team-Defaults enthält.
 
-## Bot2 Troubleshooting (502 / Bootstrap)
-
-- Ein `502` auf `/api/bot2/token` bedeutet häufig: `BOT2_TOKEN_ENDPOINT` ist falsch oder das Upstream-Format passt nicht.
-- Für die Validierung bevorzugt `/api/bot2/session` nutzen (liefert `token` + regionale `domain`).
-
-Beispielchecks:
-
-```bash
-curl -i -X POST http://localhost:8787/api/bot2/session
-curl -i -X POST http://localhost:8787/api/bot2/token
-```
