@@ -58,7 +58,7 @@ Token-Response (sanitized)
 ### 1) Frontend
 
 ```bash
-cd /home/azureuser/.openclaw/workspace/career-copilot-webapp
+cd career-copilot-webapp
 python -m http.server 8080
 ```
 
@@ -71,12 +71,15 @@ python -m http.server 8080
 ### 2) Backend (FastAPI)
 
 ```bash
-cd /home/azureuser/.openclaw/workspace/career-copilot-webapp/backend
+cd career-copilot-webapp
+cd backend
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 ```
+
+Hinweis: `.env.example` ist eine Dotfile und kann je nach Dateiexplorer standardmäßig ausgeblendet sein.
 
 Danach `.env` anpassen (mindestens `BOT2_TOKEN_ENDPOINT`).
 
