@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexoria Consulting – Karriere (Bot 2)</title>
+    <meta
+      name="description"
+      content="Karriere bei Nexoria Consulting mit Bot 2 UI Placeholder für Microsoft 365 Agents SDK."
+    />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body data-page="bot2">
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a href="index.html" class="brand" aria-label="Nexoria Consulting Startseite">Nexoria Consulting</a>
+        <nav aria-label="Hauptnavigation" class="top-nav">
+          <a href="index.html" data-nav="home">Landing Page</a>
+          <a href="career-bot1.html" data-nav="bot1">Karriere (Bot 1)</a>
+          <a href="career-bot2.html" data-nav="bot2">Karriere (Bot 2)</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <p class="eyebrow">Karriere bei Nexoria</p>
+          <h1>Wachse mit Projekten, die Zukunft gestalten.</h1>
+          <p class="lead">Diese Seite zeigt Bot 2 als eigene Chat-UI – M365 Agents SDK Integration folgt im nächsten Schritt.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container card-grid card-grid-2">
+          <article class="card">
+            <h2>Unser Team</h2>
+            <p>Interdisziplinäre Squad-Struktur aus Consulting, Engineering, Data und Change Management.</p>
+          </article>
+          <article class="card">
+            <h2>Benefits</h2>
+            <ul>
+              <li>Hybrides Arbeiten & flexible Zeiten</li>
+              <li>Weiterbildungsbudget + Zertifizierungen</li>
+              <li>Mentoring-Programm und Gesundheitsangebote</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h2>Offene Rollen</h2>
+            <ul>
+              <li>Senior Consultant Digital Transformation</li>
+              <li>Data & AI Solution Architect</li>
+              <li>People & Change Manager</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h2>Bewerbungsprozess</h2>
+            <ol>
+              <li>CV-Check & erstes Kennenlernen (30 Min.)</li>
+              <li>Case-Interview mit Teamlead</li>
+              <li>Culture-Fit Gespräch & Angebot</li>
+            </ol>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section-chat-placeholder">
+        <div class="container">
+          <article class="chat-shell" aria-label="Bot 2 Chat Placeholder">
+            <header class="chat-shell__header">
+              <h2>M365 Agents SDK (coming next)</h2>
+              <p>SDK Integration folgt im nächsten Schritt.</p>
+            </header>
+            <div id="bot2-messages" class="chat-shell__messages" aria-live="polite"></div>
+            <form id="bot2-form" class="chat-shell__form">
+              <label for="bot2-input" class="sr-only">Nachricht eingeben</label>
+              <input id="bot2-input" type="text" placeholder="Stelle eine Frage zu Rollen, CV oder Interviews" required />
+              <button class="btn" type="submit">Senden</button>
+            </form>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="src/js/config.js"></script>
+    <script src="src/js/chat-service.js"></script>
+    <script src="src/js/common.js"></script>
+    <script src="src/js/bot2-chat.js"></script>
+  </body>
+</html>

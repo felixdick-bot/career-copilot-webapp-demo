@@ -3,18 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Career Copilot – Karriere mit KI-Unterstützung</title>
+    <title>Nexoria Consulting – Startseite</title>
     <meta
       name="description"
-      content="Career Copilot hilft bei Karriereplanung, Bewerbungsstrategie und Interviewvorbereitung – modern, responsiv und integrationsbereit."
+      content="Nexoria Consulting unterstützt Unternehmen bei digitaler Transformation und beim Aufbau zukunftsfähiger Teams."
     />
     <link rel="stylesheet" href="src/styles/main.css" />
   </head>
-  <body>
+  <body data-page="home">
     <header class="site-header">
-      <div class="container">
-        <a href="#" class="brand" aria-label="Career Copilot Startseite">Career Copilot</a>
-        <a class="btn btn-ghost" href="#chat-panel">KI-Assistent öffnen</a>
+      <div class="container nav-wrap">
+        <a href="index.html" class="brand" aria-label="Nexoria Consulting Startseite">Nexoria Consulting</a>
+        <nav aria-label="Hauptnavigation" class="top-nav">
+          <a href="index.html" data-nav="home">Landing Page</a>
+          <a href="career-bot1.html" data-nav="bot1">Karriere (Bot 1)</a>
+          <a href="career-bot2.html" data-nav="bot2">Karriere (Bot 2)</a>
+        </nav>
       </div>
     </header>
 
@@ -22,78 +26,62 @@
       <section class="hero">
         <div class="container hero-grid">
           <div>
-            <p class="eyebrow">Karriereplattform mit KI-Begleitung</p>
-            <h1>Dein nächster Karriereschritt, klar geplant.</h1>
+            <p class="eyebrow">Future-ready Consulting & Talent</p>
+            <h1>Wir bauen digitale Organisationen, die Menschen gerne mitgestalten.</h1>
             <p class="lead">
-              Von der Standortbestimmung bis zum Interview: Career Copilot liefert dir personalisierte
-              Guidance und bereitet die Integration echter Copilot-Backends vor.
+              Nexoria Consulting verbindet Technologie, Strategie und Talententwicklung. Wir begleiten Unternehmen beim Wandel
+              und schaffen Karrierewege, die Wirkung entfalten.
             </p>
             <div class="hero-actions">
-              <a class="btn" href="#chat-panel">Mit Copilot starten</a>
-              <a class="btn btn-ghost" href="#steps">So funktioniert’s</a>
+              <a class="btn" href="career-bot1.html">Karriere entdecken</a>
+              <a class="btn btn-ghost" href="#value-props">Unsere Stärken</a>
             </div>
           </div>
-          <aside class="hero-card" aria-label="Vorteile auf einen Blick">
-            <h2>Was du bekommst</h2>
+          <aside class="hero-card" aria-label="Nexoria auf einen Blick">
+            <h2>Nexoria in Kürze</h2>
             <ul>
-              <li>Klare Karriere-Roadmap</li>
-              <li>Rollen- und Skill-Matching</li>
-              <li>Bewerbungs- & Interview-Coaching</li>
-              <li>Nahtlose Copilot-Integration</li>
+              <li>360° Beratung für Transformation & Change</li>
+              <li>Starke Lernkultur und transparente Karrierepfade</li>
+              <li>Hybrides Arbeiten mit Fokus auf Teamwirkung</li>
             </ul>
           </aside>
         </div>
       </section>
 
-      <section class="section" id="steps">
+      <section class="section" id="value-props">
         <div class="container">
-          <h2>In 3 Schritten zu mehr Karriereklarheit</h2>
-          <div class="card-grid">
+          <h2>Warum Nexoria?</h2>
+          <div class="card-grid card-grid-3">
             <article class="card">
-              <h3>1. Standort erfassen</h3>
-              <p>Fähigkeiten, Erfahrung und Ziele strukturiert aufnehmen.</p>
+              <h3>Impact statt Folien</h3>
+              <p>Unsere Teams liefern messbare Ergebnisse – von Prozessautomatisierung bis zur erfolgreichen Produktadoption.</p>
             </article>
             <article class="card">
-              <h3>2. Zielbild schärfen</h3>
-              <p>Passende Rollen, Lernpfade und Prioritäten ableiten.</p>
+              <h3>Karriere mit Mentoring</h3>
+              <p>Individuelle Entwicklungspläne, interne Academy und regelmäßiges Coaching unterstützen deinen nächsten Schritt.</p>
             </article>
             <article class="card">
-              <h3>3. Umsetzen</h3>
-              <p>CV, Anschreiben, Interviewfragen und nächste Schritte planen.</p>
+              <h3>Technologie mit Verantwortung</h3>
+              <p>Wir setzen moderne Plattformen pragmatisch ein und achten auf Sicherheit, Qualität und nachhaltige Skalierung.</p>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-cta">
+        <div class="container">
+          <div class="cta-box">
+            <h2>Bereit für deinen nächsten Karriereschritt?</h2>
+            <p>Nutze unsere Karriere-Assistenten und finde die Rolle, die zu deinen Zielen passt.</p>
+            <div class="hero-actions">
+              <a class="btn" href="career-bot1.html">Zu Karriere (Bot 1)</a>
+              <a class="btn btn-alt" href="career-bot2.html">Zu Karriere (Bot 2)</a>
+            </div>
           </div>
         </div>
       </section>
     </main>
 
-    <button
-      id="chat-fab"
-      class="chat-fab"
-      type="button"
-      aria-label="Career Copilot Chat öffnen"
-      aria-expanded="false"
-      aria-controls="chat-panel"
-    >
-      <svg class="chat-fab__icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-6.2l-3.8 3.8c-.6.6-1.6.2-1.6-.7V17H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm2 4a1 1 0 1 0 0 2h12a1 1 0 1 0 0-2H6Zm0 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H6Z"/>
-      </svg>
-    </button>
-
-    <section
-      id="chat-panel"
-      class="chat-panel"
-      role="dialog"
-      aria-modal="false"
-      aria-label="Career Copilot Chat"
-      hidden
-    >
-      <div id="embed-container" class="embed-container">
-        <p>Kein Embed konfiguriert. Hinterlege eine iFrame-URL in <code>src/js/config.js</code>.</p>
-      </div>
-    </section>
-
-    <script src="src/js/config.js"></script>
-    <script src="src/js/chat-service.js"></script>
-    <script src="src/js/app.js"></script>
+    <script src="src/js/common.js"></script>
   </body>
 </html>
