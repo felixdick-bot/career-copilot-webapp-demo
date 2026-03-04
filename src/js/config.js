@@ -7,6 +7,10 @@ window.CAREER_COPILOT_CONFIG = {
     iframeUrl: "",
     title: "Copilot Studio Web Channel"
   },
+  bot2: {
+    useApi: false,
+    apiUrl: "/api/bot2/chat"
+  },
   agentsSdk: {
     connectionString: "", // never commit real secrets
     endpoint: "", // optional helper for backend relay

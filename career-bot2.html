@@ -6,7 +6,7 @@
     <title>Nexoria Consulting – Karriere (Bot 2)</title>
     <meta
       name="description"
-      content="Karriere bei Nexoria Consulting mit Bot 2 UI Placeholder für Microsoft 365 Agents SDK."
+      content="Karriere bei Nexoria Consulting mit Bot 2 als eigener Chat-UI im FAB-Panel."
     />
     <link rel="stylesheet" href="src/styles/main.css" />
   </head>
@@ -27,7 +27,7 @@
         <div class="container">
           <p class="eyebrow">Karriere bei Nexoria</p>
           <h1>Wachse mit Projekten, die Zukunft gestalten.</h1>
-          <p class="lead">Diese Seite zeigt Bot 2 als eigene Chat-UI – M365 Agents SDK Integration folgt im nächsten Schritt.</p>
+          <p class="lead">Diese Seite zeigt Bot 2 als eigene Chat-UI im FAB-Panel. API-Anbindung ist vorbereitet.</p>
         </div>
       </section>
 
@@ -63,28 +63,46 @@
           </article>
         </div>
       </section>
-
-      <section class="section section-chat-placeholder">
-        <div class="container">
-          <article class="chat-shell" aria-label="Bot 2 Chat Placeholder">
-            <header class="chat-shell__header">
-              <h2>M365 Agents SDK (coming next)</h2>
-              <p>SDK Integration folgt im nächsten Schritt.</p>
-            </header>
-            <div id="bot2-messages" class="chat-shell__messages" aria-live="polite"></div>
-            <form id="bot2-form" class="chat-shell__form">
-              <label for="bot2-input" class="sr-only">Nachricht eingeben</label>
-              <input id="bot2-input" type="text" placeholder="Stelle eine Frage zu Rollen, CV oder Interviews" required />
-              <button class="btn" type="submit">Senden</button>
-            </form>
-          </article>
-        </div>
-      </section>
     </main>
+
+    <button
+      id="chat-fab"
+      class="chat-fab"
+      type="button"
+      aria-label="Bot 2 Chat öffnen"
+      aria-expanded="false"
+      aria-controls="chat-panel"
+    >
+      <svg class="chat-fab__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-6.2l-3.8 3.8c-.6.6-1.6.2-1.6-.7V17H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm2 4a1 1 0 1 0 0 2h12a1 1 0 1 0 0-2H6Zm0 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H6Z"/>
+      </svg>
+    </button>
+
+    <section
+      id="chat-panel"
+      class="chat-panel chat-panel--bot2"
+      role="dialog"
+      aria-modal="false"
+      aria-label="Career Copilot Bot 2"
+      hidden
+    >
+      <article class="chat-shell" aria-label="Career Copilot SDK Chat">
+        <header class="chat-shell__header chat-shell__header--compact">
+          <h2>Career Copilot (SDK)</h2>
+        </header>
+        <div id="bot2-messages" class="chat-shell__messages" aria-live="polite"></div>
+        <form id="bot2-form" class="chat-shell__form">
+          <label for="bot2-input" class="sr-only">Nachricht eingeben</label>
+          <input id="bot2-input" type="text" placeholder="Frage zu Rollen, CV oder Interviews" required />
+          <button class="btn" type="submit">Senden</button>
+        </form>
+      </article>
+    </section>
 
     <script src="src/js/config.js"></script>
     <script src="src/js/chat-service.js"></script>
     <script src="src/js/common.js"></script>
+    <script src="src/js/fab-panel.js"></script>
     <script src="src/js/bot2-chat.js"></script>
   </body>
 </html>

@@ -27,19 +27,20 @@ career-copilot-webapp/
 
 ## Bot 1 vs Bot 2
 
-### Bot 1 (iFrame)
+### Bot 1 (iFrame-only panel)
 
 - Seite: `career-bot1.html`
-- Verwendet das bestehende **FAB + Panel** Verhalten.
-- Der Chat-Inhalt wird ausschließlich per iFrame gerendert.
+- Verwendet ein rundes FAB unten rechts mit gemeinsamem Toggle-Verhalten.
+- Beim Öffnen zeigt das Panel nur den iFrame (ohne zusätzliche sichtbare Wrapper-Header/UI).
 - Konfiguration über `src/js/config.js > copilotEmbed.iframeUrl`.
 
-### Bot 2 (M365 Agents SDK Placeholder)
+### Bot 2 (Custom Chat-UI, SDK/API-ready)
 
 - Seite: `career-bot2.html`
-- Eigene lokale Chat-UI (Header, Nachrichtenbereich, Input, Senden).
-- Aktuell **Mock-Modus** über `chat-service.js`.
-- Sichtbarer Hinweis: **„SDK Integration folgt im nächsten Schritt“ / „M365 Agents SDK (coming next)“.**
+- Nutzt dasselbe FAB-Muster wie Bot 1 (unten rechts, gleiches Verhalten).
+- Beim Öffnen zeigt das Panel eine eigene kompakte Chat-UI (Header, Messages, Input + Send).
+- Aktuell **Mock-Modus** über `chat-service.js`, vorbereitet für späteren Python Bot Framework SDK API-Call.
+- Konfigurierbar über `src/js/config.js > bot2.useApi` und `bot2.apiUrl` (Default: `/api/bot2/chat`).
 
 ## Lokal starten
 
