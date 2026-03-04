@@ -74,8 +74,9 @@
       aria-expanded="false"
       aria-controls="chat-panel"
     >
-      <span aria-hidden="true">🤖</span>
-      <span class="chat-fab__text">Copilot</span>
+      <svg class="chat-fab__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-6.2l-3.8 3.8c-.6.6-1.6.2-1.6-.7V17H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm2 4a1 1 0 1 0 0 2h12a1 1 0 1 0 0-2H6Zm0 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H6Z"/>
+      </svg>
     </button>
 
     <section
@@ -88,37 +89,12 @@
     >
       <header class="chat-panel__header" id="chat-assistant">
         <h2 id="chat-title">Career Copilot</h2>
-        <div class="chat-panel__controls">
-          <label for="integration-mode" class="sr-only">Integrationsmodus auswählen</label>
-          <select id="integration-mode" aria-label="Integrationsmodus">
-            <option value="mock">Mock / Local</option>
-            <option value="iframe">Copilot Embed (iFrame)</option>
-            <option value="agents">Agents SDK (Placeholder)</option>
-          </select>
-          <button id="chat-close" class="icon-btn" aria-label="Chat schließen" type="button">✕</button>
-        </div>
+        <button id="chat-close" class="icon-btn" aria-label="Chat schließen" type="button">✕</button>
       </header>
 
-      <p id="chat-status" class="chat-status" aria-live="polite"></p>
-
-      <div id="chat-messages" class="chat-messages" aria-label="Chatverlauf"></div>
-
-      <div id="embed-container" class="embed-container" hidden>
-        <p>Kein Embed konfiguriert. Hinterlege eine iFrame-URL in der Konfiguration.</p>
+      <div id="embed-container" class="embed-container">
+        <p>Kein Embed konfiguriert. Hinterlege eine iFrame-URL in <code>src/js/config.js</code>.</p>
       </div>
-
-      <form id="chat-form" class="chat-form" aria-label="Nachricht senden">
-        <label for="chat-input" class="sr-only">Nachricht eingeben</label>
-        <input
-          id="chat-input"
-          name="message"
-          type="text"
-          placeholder="Frag mich zu Karriere, CV oder Interview …"
-          autocomplete="off"
-          required
-        />
-        <button class="btn" type="submit">Senden</button>
-      </form>
     </section>
 
     <script src="src/js/config.js"></script>
