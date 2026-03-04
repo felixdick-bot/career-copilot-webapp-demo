@@ -91,16 +91,12 @@
           <h2>Career Copilot (SDK)</h2>
         </header>
         <div id="bot2-messages" class="chat-shell__messages" aria-live="polite"></div>
-        <form id="bot2-form" class="chat-shell__form">
-          <label for="bot2-input" class="sr-only">Nachricht eingeben</label>
-          <input id="bot2-input" type="text" placeholder="Frage zu Rollen, CV oder Interviews" required />
-          <button class="btn" type="submit">Senden</button>
-        </form>
+        <div id="bot2-webchat" class="bot2-webchat" aria-label="Bot2 Web Chat"></div>
       </article>
     </section>
 
+    <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
     <script src="src/js/config.js"></script>
-    <script src="src/js/chat-service.js"></script>
     <script src="src/js/common.js"></script>
     <script src="src/js/fab-panel.js"></script>
     <script src="src/js/bot2-chat.js"></script>

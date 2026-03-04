@@ -1,15 +1,15 @@
 # Nexoria Consulting – Multi-Page Career Copilot Demo
 
-Statischer Frontend-Demo mit drei Seiten und konsistentem Corporate-Look:
+Statischer Frontend-Demo mit drei Seiten plus optionalem FastAPI-Backend für Bot2-Token-Proxy.
 
-1. **Landing Page** (`index.html`)
-2. **Karriere (Bot 1 – iFrame)** (`career-bot1.html`)
-3. **Karriere (Bot 2 – M365 Agents SDK Placeholder)** (`career-bot2.html`)
-
-## Seitenstruktur
+## Projektstruktur
 
 ```text
 career-copilot-webapp/
+├── backend/
+│   ├── .env.example
+│   ├── main.py
+│   └── requirements.txt
 ├── career-bot1.html
 ├── career-bot2.html
 ├── index.html
@@ -30,44 +30,77 @@ career-copilot-webapp/
 ### Bot 1 (iFrame-only panel)
 
 - Seite: `career-bot1.html`
-- Verwendet ein rundes FAB unten rechts mit gemeinsamem Toggle-Verhalten.
-- Beim Öffnen zeigt das Panel nur den iFrame (ohne zusätzliche sichtbare Wrapper-Header/UI).
-- Der iFrame wird nach dem Seitenaufbau im Hintergrund vorgewärmt (idle warmup), beim Schließen nicht zerstört und beim erneuten Öffnen direkt weiterverwendet.
-- Die Bot1-Seite setzt zusätzlich `preconnect`/`dns-prefetch` auf die Copilot-Domain für schnelleren Verbindungsaufbau.
+- Nutzt FAB + Panel mit eingebettetem iFrame.
 - Konfiguration über `src/js/config.js > copilotEmbed.iframeUrl`.
 
-### Bot 2 (Custom Chat-UI, SDK/API-ready)
+### Bot 2 (Custom UI + Web Chat/Direct Line)
 
 - Seite: `career-bot2.html`
-- Nutzt dasselbe FAB-Muster wie Bot 1 (unten rechts, gleiches Verhalten).
-- Beim Öffnen zeigt das Panel eine eigene kompakte Chat-UI (Header, Messages, Input + Send).
-- Aktuell **Mock-Modus** über `chat-service.js`, vorbereitet für späteren Python Bot Framework SDK API-Call.
-- Konfigurierbar über `src/js/config.js > bot2.useApi` und `bot2.apiUrl` (Default: `/api/bot2/chat`).
+- Behält das bestehende FAB-/Panel-Pattern bei.
+- Die Nachrichten-Engine läuft über Bot Framework Web Chat (CDN nur auf dieser Seite).
+- Beim Öffnen des Panels holt das Frontend ein Token **nur vom eigenen Backend** (`/api/bot2/token`) und rendert dann Web Chat im Panel.
+- Kein Upstream-Token-Endpoint und keine Secrets im Frontend.
 
-## Lokal starten
+## Architektur (Bot2)
+
+```text
+Browser (career-bot2.html)
+  -> POST /api/bot2/token (same-origin)
+FastAPI backend (Token-Proxy)
+  -> POST BOT2_TOKEN_ENDPOINT (serverseitig)
+Token-Response (sanitized)
+  -> WebChat.createDirectLine({ token, domain? })
+  -> renderWebChat(...) im Bot2-Panel
+```
+
+## Lokaler Start
+
+### 1) Frontend
 
 ```bash
 cd /home/azureuser/.openclaw/workspace/career-copilot-webapp
 python -m http.server 8080
 ```
 
-Dann im Browser öffnen:
+Öffnen:
 
 - <http://localhost:8080/index.html>
 - <http://localhost:8080/career-bot1.html>
 - <http://localhost:8080/career-bot2.html>
 
-## Hinweise zur Konfiguration
+### 2) Backend (FastAPI)
+
+```bash
+cd /home/azureuser/.openclaw/workspace/career-copilot-webapp/backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+```
+
+Danach `.env` anpassen (mindestens `BOT2_TOKEN_ENDPOINT`).
+
+Start:
+
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Healthcheck:
+
+- `GET http://localhost:8000/api/health`
+
+## ENV-Konfiguration (Backend)
+
+- `BOT2_TOKEN_ENDPOINT` (**required**): serverseitiger Upstream-Endpunkt zur Token-Erzeugung.
+- `BOT2_TOKEN_TIMEOUT_SECONDS` (optional, Default `10`)
+- `BACKEND_CORS_ORIGINS` (optional, kommasepariert)
+
+## Frontend-Konfiguration
 
 In `src/js/config.js`:
 
-```js
-window.CAREER_COPILOT_CONFIG = {
-  copilotEmbed: {
-    iframeUrl: "", // URL oder vollständiges iframe-Snippet
-    title: "Copilot Studio Web Channel"
-  }
-};
-```
+- `bot2.tokenApiPath` (Default: `/api/bot2/token`)
+- `bot2.styleOptions` (Avatar-Initialen, Farben, etc.)
 
-Ohne gültige URL zeigt Bot 1 eine sichere Fallback-Meldung an.
+Das Frontend spricht nur den lokalen/same-origin Proxy-Pfad an.

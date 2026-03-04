@@ -8,8 +8,15 @@ window.CAREER_COPILOT_CONFIG = {
     title: "Copilot Studio Web Channel"
   },
   bot2: {
-    useApi: false,
-    apiUrl: "/api/bot2/chat"
+    tokenApiPath: "/api/bot2/token",
+    styleOptions: {
+      accent: "#0f172a",
+      botAvatarInitials: "CC",
+      userAvatarInitials: "DU",
+      backgroundColor: "#ffffff",
+      bubbleBackground: "#e2e8f0",
+      bubbleFromUserBackground: "#dbeafe"
+    }
   },
   agentsSdk: {
     connectionString: "", // never commit real secrets

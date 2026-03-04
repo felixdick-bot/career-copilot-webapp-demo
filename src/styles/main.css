@@ -245,7 +245,7 @@ h3 {
   overflow: hidden;
   box-shadow: var(--shadow);
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr;
   height: 100%;
 }
 
@@ -292,19 +292,10 @@ h3 {
   background: #e2e8f0;
 }
 
-.chat-shell__form {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border-top: 1px solid var(--border);
-}
-
-#bot2-input {
-  border: 1px solid var(--border);
-  border-radius: 0.65rem;
-  padding: 0.55rem;
-  width: 100%;
+.bot2-webchat {
+  min-height: 200px;
+  height: 100%;
+  background: #fcfdff;
 }
 
 .sr-only {

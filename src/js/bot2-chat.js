@@ -1,43 +1,118 @@
 (() => {
-  const form = document.getElementById("bot2-form");
-  const input = document.getElementById("bot2-input");
+  const panel = document.getElementById("chat-panel");
+  const fab = document.getElementById("chat-fab");
   const messages = document.getElementById("bot2-messages");
+  const webchatRoot = document.getElementById("bot2-webchat");
 
-  if (!form || !input || !messages) return;
+  if (!panel || !fab || !messages || !webchatRoot) return;
 
   const config = window.CAREER_COPILOT_CONFIG || {};
-  const service = typeof window.ChatService === "function" ? new window.ChatService(config) : null;
+  const bot2Config = {
+    tokenApiPath: "/api/bot2/token",
+    styleOptions: {
+      accent: "#0f172a",
+      botAvatarInitials: "CC",
+      userAvatarInitials: "DU",
+      backgroundColor: "#ffffff",
+      bubbleBackground: "#e2e8f0",
+      bubbleFromUserBackground: "#dbeafe",
+    },
+    ...(config.bot2 || {}),
+  };
 
-  const appendMessage = (text, role = "bot") => {
-    if (!text) return;
+  let initialized = false;
+
+  const showTextMessage = (text, variant = "bot") => {
+    messages.hidden = false;
+    webchatRoot.hidden = true;
+
     const bubble = document.createElement("p");
-    bubble.className = `msg ${role}`;
+    bubble.className = `msg ${variant}`;
     bubble.textContent = text;
     messages.appendChild(bubble);
     messages.scrollTop = messages.scrollHeight;
   };
 
-  appendMessage("Hi! Ich bin dein Career Copilot. Aktuell antworte ich lokal im Mock-Modus.", "bot");
+  const showError = (text) => {
+    showTextMessage(text, "bot");
+  };
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const text = input.value.trim();
-    if (!text) return;
+  const fetchToken = async () => {
+    const response = await fetch(bot2Config.tokenApiPath, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    });
 
-    appendMessage(text, "user");
-    input.value = "";
+    if (!response.ok) {
+      throw new Error(`Token request failed (${response.status})`);
+    }
+
+    return response.json();
+  };
+
+  const initWebChat = async () => {
+    if (initialized) return;
+    initialized = true;
+
+    if (!window.WebChat) {
+      showError("Chat-Engine konnte nicht geladen werden. Bitte Seite neu laden.");
+      return;
+    }
 
     try {
-      if (!service || typeof service.sendBot2Message !== "function") {
-        appendMessage("Service nicht verfügbar. Bitte src/js/chat-service.js prüfen.", "bot");
-        return;
+      const tokenPayload = await fetchToken();
+      if (!tokenPayload?.token) {
+        throw new Error("Missing token field in response");
       }
 
-      const reply = await service.sendBot2Message(text);
-      appendMessage(reply?.text || "Keine Antwort verfügbar.", "bot");
+      const directLineOptions = {
+        token: tokenPayload.token,
+      };
+
+      if (tokenPayload.domain) {
+        directLineOptions.domain = tokenPayload.domain;
+      }
+
+      const directLine = window.WebChat.createDirectLine(directLineOptions);
+      const styleOptions = {
+        accent: bot2Config.styleOptions.accent,
+        backgroundColor: bot2Config.styleOptions.backgroundColor,
+        bubbleBackground: bot2Config.styleOptions.bubbleBackground,
+        bubbleFromUserBackground: bot2Config.styleOptions.bubbleFromUserBackground,
+        botAvatarInitials: bot2Config.styleOptions.botAvatarInitials,
+        userAvatarInitials: bot2Config.styleOptions.userAvatarInitials,
+        hideUploadButton: true,
+      };
+
+      messages.hidden = true;
+      webchatRoot.hidden = false;
+
+      window.WebChat.renderWebChat(
+        {
+          directLine,
+          styleOptions,
+        },
+        webchatRoot
+      );
     } catch (error) {
-      appendMessage("Es gab einen Fehler. Bitte später erneut versuchen.", "bot");
+      initialized = false;
+      showError("Bot2 ist aktuell nicht erreichbar. Bitte versuche es später erneut.");
       console.error("[bot2-chat]", error);
     }
+  };
+
+  showTextMessage("Bot2 wird beim Öffnen verbunden…", "bot");
+
+  const maybeInitOnOpen = () => {
+    if (!panel.hidden) {
+      void initWebChat();
+    }
+  };
+
+  fab.addEventListener("click", () => {
+    window.setTimeout(maybeInitOnOpen, 0);
   });
 })();
