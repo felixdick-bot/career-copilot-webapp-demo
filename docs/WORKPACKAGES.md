@@ -31,4 +31,4 @@
 - [x] Integrationspfad A (iFrame) dokumentiert
 - [x] Integrationspfad B (Agents SDK) dokumentiert (inkl. Auth/No-auth)
 - [x] TODO-Liste für Python-Backend
-- [ ] Git Commits + Push `origin/main`
+- [x] Git Commits + Push `origin/main`
