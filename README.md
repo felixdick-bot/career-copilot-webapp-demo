@@ -102,7 +102,7 @@ Healthcheck:
 
 - `BOT2_TOKEN_ENDPOINT` (**required**): serverseitiger Upstream-Endpunkt zur Token-Erzeugung.
 - `BOT2_TOKEN_TIMEOUT_SECONDS` (optional, Default `10`)
-- `BACKEND_CORS_ORIGINS` (optional, kommasepariert)
+- `BACKEND_CORS_ORIGINS` (optional, kommasepariert). Wenn leer, nutzt das Backend dev-freundliche Defaults (`http://localhost:4173`, `http://127.0.0.1:4173`, `http://localhost:5173`, `http://127.0.0.1:5173`).
 
 ## Frontend-Konfiguration
 
@@ -110,9 +110,10 @@ In `src/js/config.js`:
 
 - `bot2.sessionApiPath` (Default: `/api/bot2/session`, bevorzugt)
 - `bot2.tokenApiPath` (Default: `/api/bot2/token`, optionaler Fallback)
+- `bot2.apiBaseUrl` (optional, z. B. `http://localhost:8787` bei getrennten Origins)
 - `bot2.styleOptions` (Avatar-Initialen, Farben, etc.)
 
-Das Frontend spricht nur lokale/same-origin Proxy-Pfade an.
+Wenn `bot2.apiBaseUrl` leer ist, versucht das Frontend zuerst relative API-Pfade. Für lokale Dev-Setups mit Frontend auf `localhost:4173/5173` nutzt es automatisch `http://localhost:8787` für `/api/...`.
 
 ## Troubleshooting Bot2 502 (Quick Checks)
 

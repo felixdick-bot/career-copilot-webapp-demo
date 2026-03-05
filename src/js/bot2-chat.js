@@ -39,6 +39,7 @@
   const bot2Config = {
     sessionApiPath: "/api/bot2/session",
     tokenApiPath: "/api/bot2/token",
+    apiBaseUrl: "",
     directLineDomain: "",
     fallbackPrompts: [
       "Welche Stellen sind aktuell offen?",
@@ -77,6 +78,26 @@
     messages.scrollTop = messages.scrollHeight;
   };
 
+  const resolveApiUrl = (path) => {
+    if (!path) return path;
+    if (/^https?:\/\//i.test(path)) return path;
+
+    const configuredBase = (bot2Config.apiBaseUrl || "").trim();
+    if (configuredBase) {
+      return `${configuredBase.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
+    }
+
+    const host = window.location.hostname;
+    const isLocalHost = host === "localhost" || host === "127.0.0.1";
+    const isLikelyFrontendDevServer = isLocalHost && window.location.port && window.location.port !== "8787";
+
+    if (isLikelyFrontendDevServer && path.startsWith("/api/")) {
+      return `http://localhost:8787${path}`;
+    }
+
+    return path;
+  };
+
   const formatBackendError = async (response) => {
     let detail = "";
     try {
@@ -96,7 +117,8 @@
     let sessionError = null;
 
     try {
-      const sessionResponse = await fetch(bot2Config.sessionApiPath, {
+      const sessionUrl = resolveApiUrl(bot2Config.sessionApiPath);
+      const sessionResponse = await fetch(sessionUrl, {
         method: "POST"
       });
 
@@ -119,7 +141,8 @@
       console.warn("[bot2-chat] Session bootstrap failed, trying token fallback:", error);
     }
 
-    const tokenResponse = await fetch(bot2Config.tokenApiPath, {
+    const tokenUrl = resolveApiUrl(bot2Config.tokenApiPath);
+    const tokenResponse = await fetch(tokenUrl, {
       method: "POST"
     });
 

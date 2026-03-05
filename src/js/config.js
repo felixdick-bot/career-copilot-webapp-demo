@@ -10,6 +10,7 @@ window.CAREER_COPILOT_CONFIG = {
   bot2: {
     sessionApiPath: "/api/bot2/session", // bevorzugter Bootstrap-Endpoint (liefert token + domain)
     tokenApiPath: "/api/bot2/token", // optionaler Fallback für ältere Backends
+    apiBaseUrl: "", // optional: z. B. "http://localhost:8787" bei getrenntem Frontend-Dev-Server
     // directLineDomain: "https://directline.botframework.com/v3/directline", // optional fallback when token response has no domain
     styleOptions: {
       accent: "#0f172a",

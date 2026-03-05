@@ -24,7 +24,17 @@ app = FastAPI(title="Career Copilot Bot2 Backend", version="1.0.0")
 
 def _parse_cors_origins() -> list[str]:
     raw = os.getenv("BACKEND_CORS_ORIGINS", "")
-    return [origin.strip() for origin in raw.split(",") if origin.strip()]
+    parsed = [origin.strip() for origin in raw.split(",") if origin.strip()]
+    if parsed:
+        return parsed
+
+    # Dev-friendly defaults for split frontend/backend local setup.
+    return [
+        "http://localhost:4173",
+        "http://127.0.0.1:4173",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
 
 
 def _safe_upstream_error(phase: str, status_code: int, method: str | None = None) -> HTTPException:
