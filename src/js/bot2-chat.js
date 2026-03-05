@@ -1,10 +1,10 @@
 (() => {
-  const panel = document.getElementById("chat-panel");
-  const fab = document.getElementById("chat-fab");
   const messages = document.getElementById("bot2-messages");
   const webchatRoot = document.getElementById("bot2-webchat");
+  const promptsRoot = document.getElementById("bot2-prompts");
+  const statusNode = document.getElementById("bot2-status");
 
-  if (!panel || !fab || !messages || !webchatRoot) return;
+  if (!messages || !webchatRoot || !promptsRoot || !statusNode) return;
 
   const deepMerge = (target, source) => {
     if (!source || typeof source !== "object") return { ...target };
@@ -35,22 +35,36 @@
   const baseConfig = window.CAREER_COPILOT_CONFIG || {};
   const localConfig = window.CAREER_COPILOT_CONFIG_LOCAL || {};
   const config = deepMerge(baseConfig, localConfig);
+
   const bot2Config = {
     sessionApiPath: "/api/bot2/session",
     tokenApiPath: "/api/bot2/token",
     directLineDomain: "",
+    fallbackPrompts: [
+      "Welche Stellen sind aktuell offen?",
+      "Wie läuft der Bewerbungsprozess ab?",
+      "Welche Benefits bietet Nexoria?",
+      "Welche Rolle passt zu meinem Profil?"
+    ],
     styleOptions: {
-      accent: "#0f172a",
-      botAvatarInitials: "CC",
+      accent: "#1d4ed8",
+      botAvatarInitials: "NX",
       userAvatarInitials: "DU",
       backgroundColor: "#ffffff",
       bubbleBackground: "#e2e8f0",
-      bubbleFromUserBackground: "#dbeafe",
+      bubbleFromUserBackground: "#dbeafe"
     },
-    ...(config.bot2 || {}),
+    ...(config.bot2 || {})
   };
 
-  let initialized = false;
+  let webChatReady = false;
+  let postActivity = null;
+  let promptButtons = [];
+
+  const setStatus = (text, mode = "neutral") => {
+    statusNode.textContent = text;
+    statusNode.dataset.mode = mode;
+  };
 
   const showTextMessage = (text, variant = "bot") => {
     messages.hidden = false;
@@ -61,10 +75,6 @@
     bubble.textContent = text;
     messages.appendChild(bubble);
     messages.scrollTop = messages.scrollHeight;
-  };
-
-  const showError = (text) => {
-    showTextMessage(text, "bot");
   };
 
   const formatBackendError = async (response) => {
@@ -87,7 +97,7 @@
 
     try {
       const sessionResponse = await fetch(bot2Config.sessionApiPath, {
-        method: "POST",
+        method: "POST"
       });
 
       if (!sessionResponse.ok) {
@@ -110,7 +120,7 @@
     }
 
     const tokenResponse = await fetch(bot2Config.tokenApiPath, {
-      method: "POST",
+      method: "POST"
     });
 
     if (!tokenResponse.ok) {
@@ -131,12 +141,38 @@
     return tokenPayload;
   };
 
-  const initWebChat = async () => {
-    if (initialized) return;
-    initialized = true;
+  const extractPromptList = (actions = []) =>
+    actions
+      .map((action) => {
+        const title = typeof action?.title === "string" ? action.title.trim() : "";
+        const value = typeof action?.value === "string" ? action.value.trim() : title;
+        return title || value ? { title: title || value, value } : null;
+      })
+      .filter(Boolean);
 
+  const renderPromptButtons = (items) => {
+    const nextPrompts = Array.isArray(items) && items.length ? items : extractPromptList(bot2Config.fallbackPrompts.map((text) => ({ title: text, value: text })));
+
+    promptButtons = nextPrompts;
+    promptsRoot.innerHTML = "";
+
+    nextPrompts.forEach((prompt) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "prompt-chip";
+      button.textContent = prompt.title;
+      button.addEventListener("click", () => {
+        if (!webChatReady || typeof postActivity !== "function") return;
+        postActivity(prompt.value || prompt.title);
+      });
+      promptsRoot.appendChild(button);
+    });
+  };
+
+  const initWebChat = async () => {
     if (!window.WebChat) {
-      showError("Chat-Engine konnte nicht geladen werden. Bitte Seite neu laden.");
+      showTextMessage("Chat-Engine konnte nicht geladen werden. Bitte Seite neu laden.");
+      setStatus("Nicht verfügbar", "error");
       return;
     }
 
@@ -144,7 +180,7 @@
       const tokenPayload = await fetchSessionOrToken();
 
       const directLineOptions = {
-        token: tokenPayload.token,
+        token: tokenPayload.token
       };
 
       if (tokenPayload.domain) {
@@ -152,6 +188,19 @@
       }
 
       const directLine = window.WebChat.createDirectLine(directLineOptions);
+
+      const store = window.WebChat.createStore({}, ({ dispatch }) => (next) => (action) => {
+        if (action.type === "DIRECT_LINE/INCOMING_ACTIVITY") {
+          const activity = action.payload?.activity;
+          const promptList = extractPromptList(activity?.suggestedActions?.actions || []);
+          if (promptList.length) {
+            renderPromptButtons(promptList);
+          }
+        }
+
+        return next(action);
+      });
+
       const styleOptions = {
         accent: bot2Config.styleOptions.accent,
         backgroundColor: bot2Config.styleOptions.backgroundColor,
@@ -159,7 +208,7 @@
         bubbleFromUserBackground: bot2Config.styleOptions.bubbleFromUserBackground,
         botAvatarInitials: bot2Config.styleOptions.botAvatarInitials,
         userAvatarInitials: bot2Config.styleOptions.userAvatarInitials,
-        hideUploadButton: true,
+        hideUploadButton: true
       };
 
       messages.hidden = true;
@@ -169,25 +218,38 @@
         {
           directLine,
           styleOptions,
+          store
         },
         webchatRoot
       );
+
+      postActivity = (text) => {
+        directLine
+          .postActivity({
+            type: "message",
+            from: { id: "user" },
+            text
+          })
+          .subscribe({
+            error: (error) => {
+              console.error("[bot2-chat] postActivity failed", error);
+            }
+          });
+      };
+
+      webChatReady = true;
+      setStatus("Online", "ok");
+      renderPromptButtons([]);
     } catch (error) {
-      initialized = false;
-      showError("Bot2 ist aktuell nicht erreichbar. Bitte versuche es später erneut.");
+      webChatReady = false;
+      showTextMessage("Der Karriere-Chat ist aktuell nicht erreichbar. Bitte versuche es später erneut.");
+      setStatus("Offline", "error");
       console.error("[bot2-chat]", error);
     }
   };
 
-  showTextMessage("Bot2 wird beim Öffnen verbunden…", "bot");
-
-  const maybeInitOnOpen = () => {
-    if (!panel.hidden) {
-      void initWebChat();
-    }
-  };
-
-  fab.addEventListener("click", () => {
-    window.setTimeout(maybeInitOnOpen, 0);
-  });
+  setStatus("Verbinde…", "neutral");
+  showTextMessage("Karriere-Chat wird gestartet…", "bot");
+  renderPromptButtons([]);
+  void initWebChat();
 })();

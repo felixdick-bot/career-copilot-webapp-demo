@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nexoria Consulting – Karriere (Bot 2)</title>
+    <title>Nexoria Consulting – Karriere Chat</title>
     <meta
       name="description"
-      content="Karriere bei Nexoria Consulting mit Bot 2 als eigener Chat-UI im FAB-Panel."
+      content="Karriere bei Nexoria Consulting mit einem zentralen Chatinterface inkl. vorgeschlagener Prompts aus Copilot Studio."
     />
     <link rel="stylesheet" href="src/styles/main.css" />
   </head>
@@ -17,89 +17,44 @@
         <nav aria-label="Hauptnavigation" class="top-nav">
           <a href="index.html" data-nav="home">Landing Page</a>
           <a href="career-bot1.html" data-nav="bot1">Karriere (Bot 1)</a>
-          <a href="career-bot2.html" data-nav="bot2">Karriere (Bot 2)</a>
+          <a href="career-bot2.html" data-nav="bot2">Karriere Chat</a>
         </nav>
       </div>
     </header>
 
     <main>
-      <section class="page-hero">
-        <div class="container">
+      <section class="page-hero page-hero--chat">
+        <div class="container chat-hero-copy">
           <p class="eyebrow">Karriere bei Nexoria</p>
-          <h1>Wachse mit Projekten, die Zukunft gestalten.</h1>
-          <p class="lead">Diese Seite zeigt Bot 2 als eigene Chat-UI im FAB-Panel. API-Anbindung ist vorbereitet.</p>
+          <h1>Frag einfach im Chat – wir führen dich zur passenden Rolle.</h1>
+          <p class="lead">Statt langer Infoseiten bekommst du hier direkt Antworten rund um Einstieg, Rollen, Benefits und Bewerbung.</p>
         </div>
       </section>
 
-      <section class="section">
-        <div class="container card-grid card-grid-2">
-          <article class="card">
-            <h2>Unser Team</h2>
-            <p>Interdisziplinäre Squad-Struktur aus Consulting, Engineering, Data und Change Management.</p>
-          </article>
-          <article class="card">
-            <h2>Benefits</h2>
-            <ul>
-              <li>Hybrides Arbeiten & flexible Zeiten</li>
-              <li>Weiterbildungsbudget + Zertifizierungen</li>
-              <li>Mentoring-Programm und Gesundheitsangebote</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h2>Offene Rollen</h2>
-            <ul>
-              <li>Senior Consultant Digital Transformation</li>
-              <li>Data & AI Solution Architect</li>
-              <li>People & Change Manager</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h2>Bewerbungsprozess</h2>
-            <ol>
-              <li>CV-Check & erstes Kennenlernen (30 Min.)</li>
-              <li>Case-Interview mit Teamlead</li>
-              <li>Culture-Fit Gespräch & Angebot</li>
-            </ol>
+      <section class="section section-chat-center">
+        <div class="container">
+          <article class="career-chat" aria-label="Nexoria Karriere Chat">
+            <header class="career-chat__header">
+              <div>
+                <h2>Karriere Chat</h2>
+                <p>Nutze die Vorschläge oder stelle deine eigene Frage.</p>
+              </div>
+              <span class="career-chat__status" id="bot2-status">Verbinde…</span>
+            </header>
+
+            <div class="career-chat__prompts" id="bot2-prompts" aria-label="Vorgeschlagene Fragen"></div>
+
+            <div id="bot2-messages" class="chat-shell__messages" aria-live="polite"></div>
+            <div id="bot2-webchat" class="bot2-webchat bot2-webchat--center" aria-label="Bot2 Web Chat"></div>
           </article>
         </div>
       </section>
     </main>
 
-    <button
-      id="chat-fab"
-      class="chat-fab"
-      type="button"
-      aria-label="Bot 2 Chat öffnen"
-      aria-expanded="false"
-      aria-controls="chat-panel"
-    >
-      <svg class="chat-fab__icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-6.2l-3.8 3.8c-.6.6-1.6.2-1.6-.7V17H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm2 4a1 1 0 1 0 0 2h12a1 1 0 1 0 0-2H6Zm0 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H6Z"/>
-      </svg>
-    </button>
-
-    <section
-      id="chat-panel"
-      class="chat-panel chat-panel--bot2"
-      role="dialog"
-      aria-modal="false"
-      aria-label="Career Copilot Bot 2"
-      hidden
-    >
-      <article class="chat-shell" aria-label="Career Copilot SDK Chat">
-        <header class="chat-shell__header chat-shell__header--compact">
-          <h2>Career Copilot (SDK)</h2>
-        </header>
-        <div id="bot2-messages" class="chat-shell__messages" aria-live="polite"></div>
-        <div id="bot2-webchat" class="bot2-webchat" aria-label="Bot2 Web Chat"></div>
-      </article>
-    </section>
-
     <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
     <script src="src/js/config.js"></script>
     <script src="src/js/config.local.js" onerror="console.debug('Optional local config not found: src/js/config.local.js');"></script>
     <script src="src/js/common.js"></script>
-    <script src="src/js/fab-panel.js"></script>
     <script src="src/js/bot2-chat.js"></script>
   </body>
 </html>
